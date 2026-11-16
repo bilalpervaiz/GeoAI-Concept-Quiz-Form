@@ -61,7 +61,7 @@
   </section>
 
   <section id="intro">
-    <h1>Foundations of AI: the 15-minute quiz</h1>
+    <h1>🧠🤖 Bilal is testing your AI knowledge. Let’s see! 👀</h1>
     <p class="muted">Ten questions on machine learning basics for geospatial work. Set by Bilal.</p>
     <div class="card">
       <label for="name" class="sans"><strong>Your name</strong></label>
@@ -69,7 +69,7 @@
       <ul class="rules sans muted">
         <li>10 questions, 1 point each.</li>
         <li>15 minutes. The quiz submits itself when the time runs out.</li>
-        <li>One attempt. Your score appears as soon as you submit.</li>
+        <li>Your score appears as soon as you submit.</li>
       </ul>
       <div class="row"><button id="start">Start the quiz</button></div>
       <div id="introMsg" class="note" hidden></div>
@@ -91,7 +91,7 @@
       <div class="score"><span id="resScore">0</span><span class="muted" style="font-size:1.5rem"> / 10</span></div>
       <p class="verdict" id="verdict"></p>
       <div class="note" id="saveNote">Sending your score to Bilal…</div>
-      <div class="row"><button class="ghost" id="copy" type="button">Copy result</button></div>
+      <div class="row"><button class="ghost" id="copy" type="button">Copy result</button><button class="ghost" id="again" type="button">Start again</button></div>
     </div>
     <h2 style="margin-top:22px">Review</h2>
     <div id="review"></div>
@@ -185,8 +185,8 @@
   function verdict(r){
     if(r.score===r.total) return "Perfect score. Fine, "+r.name+", you can teach Bilal next time.";
     if(r.score>=PASS) return "Solid work, "+r.name+". Bilal will have to keep his lecture to himself, for now.";
-    if(r.score>=4) return "Hmm. "+r.score+" out of 10, "+r.name+". Bold strategy, guessing with such confidence. Come, Bilal will teach you these things. Bring chai.";
-    return r.score+" out of 10, "+r.name+". A coin would have put up a fight. No shame in it: come, Bilal will teach you these things, slowly, from the beginning.";
+    if(r.score>=4) return r.score+" out of 10, "+r.name+". Guessing with such confidence. Come to me, I will teach you these things. Bring coffee ☕ 😂😂😂";
+    return r.score+" out of 10, "+r.name+". Guessing with such confidence, and still this. Come to me, I will teach you these things. Bring coffee ☕ 🤣🤣🤣";
   }
 
   function renderResult(r){
@@ -290,14 +290,15 @@
     if(left && b.dataset.confirm!=="1"){ b.dataset.confirm="1"; b.textContent=left+" unanswered. Tap again to submit anyway"; return; }
     finish(false);
   });
+  $("again").addEventListener("click",function(){ store.set({}); location.reload(); });
   $("copy").addEventListener("click",function(){
     var b=$("copy");
     try{ navigator.clipboard.writeText(resultText(state.result)).then(function(){ b.textContent="Copied"; },function(){ b.textContent="Copy failed, take a screenshot"; }); }
     catch(e){ b.textContent="Copy failed, take a screenshot"; }
   });
 
-  if(state.result){ submitted=true; renderResult(state.result); if(!state.saved) save(state.result); else { $("saveNote").textContent="Your score has been sent to Bilal."; } }
-  else if(state.startedAt){ buildForm(); show("quiz"); startTimer(); }
+  if(state.result){ state={}; answers=new Array(Q.length).fill(null); store.set(state); }
+  if(state.startedAt){ buildForm(); show("quiz"); startTimer(); }
 
   ready.then(function(){
     return;
